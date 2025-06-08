@@ -13,7 +13,7 @@ const sendOTP = (email, otp) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Your OTP Code",
-    text: `Your OTP code is ${otp}`
+    text: `Your OTP code is ${otp}. It expires in 10 minutes.`
   });
 };
 
