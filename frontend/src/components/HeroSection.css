@@ -1,0 +1,156 @@
+.hero-section {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+  margin-top: 64px;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+}
+
+.hero-content {
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  background-color: #ffffff;
+  color: #000000;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Services Marquee Styling */
+.services-marquee {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 1;
+  /* Add padding to start and end 1cm (16px) from the edges */
+  padding: 0 16px;
+  /* Apply a gradient mask for a darker fade at the start and end */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%, /* Slower fade-in over 15% */
+    black 85%, /* Slower fade-out starting at 85% */
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+}
+
+.services-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+
+.service-item {
+  display: inline-block;
+  margin-right: 70px;
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: white;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+  background: none;     /* Not needed, but harmless */
+  border: none;         /* Already not visible */
+  padding: 0;           /* Ensure zero padding */
+  box-shadow: none;     /* No shadow */
+  outline: none;        /* No focus outline */
+  text-decoration: none; /* No underline (if rendered as a link) */
+}
+
+
+.service-item:hover {
+  opacity: 1; /* Brighten on hover */
+}
+
+/* Animation for continuous movement */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1.2rem;
+  }
+
+  .cta-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .service-item {
+    font-size: 1rem;
+    margin-right: 30px;
+  }
+
+  .services-marquee {
+    padding: 0 8px; /* Reduce padding on smaller screens */
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 20%, /* Adjust fade for smaller screens */
+      black 80%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    );
+  }
+}

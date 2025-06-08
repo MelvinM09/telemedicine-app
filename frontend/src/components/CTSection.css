@@ -1,0 +1,59 @@
+.features-section {
+  padding: 4.8rem 2rem;
+  background-color: #222222;; /* Dark background to match other sections */
+  text-align: center;
+  /* margin-top: 64px; */
+}
+
+.features-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white; /* White text to match other sections */
+  margin-bottom: 2rem;
+  margin-top: 80px;
+}
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem; /* Increased gap for better spacing */
+}
+
+.feature-item {
+  font-size: 1.2rem; /* Match typography of other sections */
+  font-weight: 500;
+  color: white; /* White text to match other sections */
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  outline: none;
+  transition: opacity 0.3s ease; /* Add subtle hover effect */
+}
+
+.feature-item:hover {
+  opacity: 0.8; /* Match hover effect style of other sections */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .features-section {
+    padding: 2rem 1rem;
+  }
+
+  .features-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .features-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .feature-item {
+    font-size: 1rem;
+  }
+}

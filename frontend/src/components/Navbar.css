@@ -1,0 +1,59 @@
+/* src/components/Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  background-color: #1a1a1a;
+  color: white;
+  position: fixed;
+  width: 99%;
+  top: 0;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.navbar-logo img {
+  height: 40px;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+
+.navbar-menu li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-menu li a:hover {
+  color: #cccccc;
+}
+
+.demo-button, .login-button {
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.demo-button {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+}
+
+.login-button {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+
+}
+
+.demo-button:hover, .login-button:hover {
+  opacity: 0.9;
+}
