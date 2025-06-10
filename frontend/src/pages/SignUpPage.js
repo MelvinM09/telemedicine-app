@@ -6,6 +6,7 @@ const SignUpPage = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("patient"); // Default role as patient
   const [otp, setOtp] = useState("");
   const [balls, setBalls] = useState([]);
   const navigate = useNavigate();
@@ -15,9 +16,9 @@ const SignUpPage = () => {
     const initialBalls = Array.from({ length: 100 }, () => ({
       x: Math.random() * 100,
       y: Math.random() * 50,
-      size: 0.5 + Math.random() * 1, // Tiny balls: 0.5px to 1.5px
-      speedX: (Math.random() - 0.5) * 0.1, // Speed range: -0.05 to 0.05
-      speedY: (Math.random() - 0.5) * 0.1, // Speed range: -0.05 to 0.05
+      size: 0.5 + Math.random() * 1,
+      speedX: (Math.random() - 0.5) * 0.1,
+      speedY: (Math.random() - 0.5) * 0.1,
     }));
     setBalls(initialBalls);
   }, []);
@@ -34,7 +35,6 @@ const SignUpPage = () => {
           let newSpeedX = ball.speedX;
           let newSpeedY = ball.speedY;
 
-          // Bounce off edges
           if (newX <= 0 || newX >= 100) newSpeedX *= -1;
           if (newY <= 0 || newY >= 50) newSpeedY *= -1;
 
@@ -47,41 +47,42 @@ const SignUpPage = () => {
           };
         })
       );
-    }, 50); // 50ms interval for smooth, slow animation
+    }, 50);
 
     return () => clearInterval(interval);
   }, [balls]);
 
   const handleRegister = async () => {
-    console.log("Register button clicked");
-    console.log("Registering with:", { email, password });
-
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", { email, password });
-      alert(res.data);
-      setStep(2); // Show OTP input
+      const res = await axios.post("http://localhost:5000/api/auth/register", { email, password, role });
+      alert(res.data); // Show the exact message from the backend
+      setStep(2); // Move to OTP input step
     } catch (err) {
-      alert(err.response?.data || "Registration failed");
+      const errorMessage = err.response?.data || "An unexpected error occurred during registration";
+      alert(errorMessage); // Show the exact error message from the backend
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
-      alert(res.data);
-      setStep(3); // Completed
+      alert(res.data); // Show the exact message from the backend
+      setStep(3); // Show registration complete message
+      setTimeout(() => {
+        navigate(role === "doctor" ? "/doctor-dashboard" : "/user-dashboard");
+      }, 2000);
     } catch (err) {
-      alert(err.response?.data || "OTP verification failed");
+      const errorMessage = err.response?.data || "An unexpected error occurred during OTP verification";
+      alert(errorMessage); // Show the exact error message from the backend
     }
   };
 
   const handleSignInNavigation = () => {
-    navigate("/signin"); // Navigate to the SignInPage
+    navigate("/signin");
   };
 
   return (
     <div style={styles.background}>
-      {/* Animated semi-circle with moving balls */}
       <div style={styles.gradientSemiCircle}>
         {balls.map((ball, index) => (
           <div
@@ -124,6 +125,16 @@ const SignUpPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   style={styles.input}
                 />
+              </div>
+              <div style={styles.formGroup}>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  style={styles.input}
+                >
+                  <option value="patient">Register as Patient</option>
+                  <option value="doctor">Register as Doctor</option>
+                </select>
               </div>
               <button onClick={handleRegister} style={styles.button}>
                 Register
@@ -200,6 +211,7 @@ const styles = {
     zIndex: 1,
     border: '1px solid rgba(255, 255, 255, 0.1)',
     backdropFilter: 'blur(10px)',
+    marginTop: "40px",
   },
   logo: {
     fontSize: "32px",
@@ -221,13 +233,10 @@ const styles = {
     fontSize: "24px",
     marginBottom: "20px",
     color: "#fff",
-    display: "block",
-    
   },
   subText: {
     fontSize: "14px",
     color: "#aaa",
-    marginBottom: "20px",
   },
   formGroup: {
     marginBottom: "20px",
@@ -243,9 +252,6 @@ const styles = {
     color: "#fff",
     outline: "none",
     transition: "border 0.3s",
-    '&:focus': {
-      borderColor: 'rgba(210, 180, 140, 0.5)',
-    }
   },
   button: {
     width: "100%",
@@ -259,15 +265,11 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s",
     marginTop: "10px",
-    '&:hover': {
-      backgroundColor: "#eee",
-    }
   },
   signInPrompt: {
     borderTop: "1px solid rgba(255, 255, 255, 0.1)",
     paddingTop: "20px",
   },
- 
   signInButton: {
     width: "100%",
     padding: "12px",
@@ -279,10 +281,6 @@ const styles = {
     borderRadius: "6px",
     cursor: "pointer",
     transition: "all 0.3s",
-    '&:hover': {
-      borderColor: 'rgba(210, 180, 140, 0.5)',
-      color: 'rgba(210, 180, 140, 1)',
-    }
   },
   successContainer: {
     padding: "20px",

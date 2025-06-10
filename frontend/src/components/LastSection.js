@@ -8,10 +8,10 @@ const FooterContainer = styled.footer`
   align-items: center;
   background: linear-gradient(
     180deg,
-rgba(250, 241, 206, 0.54) 0%,       /* Rich gold */
-rgba(245, 230, 179, 0.85) 40%,      /* Light gold */
-    #FFF8E1 70%,      /* Warm white */
-    #FFFFFF 100%      /* Pure white */
+rgba(225, 224, 246, 0.54) 0%,       /* Rich gold */
+rgba(179, 181, 245, 0.36) 40%,      /* Light gold */
+rgba(162, 188, 250, 0.27) 70%,      /* Warm white */
+rgba(255, 255, 255, 0.19) 100%      /* Pure white */
   );
   color: #333;        /* Dark text for contrast */
   text-align: center;
@@ -48,7 +48,7 @@ const FooterTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: #5E4B1D; /* Deep gold text */
+  color:rgb(38, 29, 94); /* Deep gold text */
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 `;
 
@@ -57,7 +57,7 @@ const FooterText = styled.p`
   margin-bottom: 2rem;
   max-width: 600px;
   line-height: 1.6;
-  color: #5E4B1D; /* Deep gold text */
+  color:rgb(29, 40, 94); /* Deep gold text */
 `;
 
 const SocialLinks = styled.div`
@@ -67,7 +67,7 @@ const SocialLinks = styled.div`
 `;
 
 const SocialLink = styled.a`
-  color: #5E4B1D; /* Gold text */
+  color:rgb(30, 29, 94); /* Gold text */
   font-size: 1.8rem;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.7);
@@ -78,10 +78,10 @@ const SocialLink = styled.a`
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid rgba(212, 175, 55, 0.3);
+  border: 2px solid rgba(63, 55, 212, 0.3);
 
   &:hover {
-    color: #D4AF37;
+    color:rgb(60, 55, 212);
     transform: translateY(-5px) scale(1.1);
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -105,7 +105,7 @@ const ContactLinks = styled.div`
 `;
 
 const ContactLink = styled.a`
-  color: #5E4B1D;
+  color:rgb(36, 29, 94);
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
@@ -116,7 +116,7 @@ const ContactLink = styled.a`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    color: #D4AF37;
+    color:rgb(60, 55, 212);
     background: rgba(255, 255, 255, 1);
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -126,7 +126,7 @@ const ContactLink = styled.a`
 const CopyrightText = styled.p`
   margin: 0;
   font-size: 0.9rem;
-  color: #5E4B1D;
+  color:rgb(29, 29, 94);
   font-weight: 500;
 `;
 
@@ -143,7 +143,7 @@ const GoldFlakes = styled.div`
 
 const GoldFlake = styled.div`
   position: absolute;
-  background: rgba(212, 175, 55, ${() => Math.random() * 0.5 + 0.3});
+  background: rgba(29, 29, 94, ${() => Math.random() * 0.5 + 0.3});
   width: ${() => Math.random() * 6 + 2}px;
   height: ${() => Math.random() * 6 + 2}px;
   border-radius: 50%;
@@ -180,7 +180,7 @@ const LastSection = () => (
     <FooterContent>
       <FooterTitle>Get Involved</FooterTitle>
       <FooterText>
-        Join our community to help shape the future of telehealth! Share your feedback, volunteer as a beta tester, or connect with us to explore partnership opportunities.
+        Join our community to help shape the future of Telehealth! Share your feedback, volunteer as a beta tester, or connect with us to explore partnership opportunities.
       </FooterText>
       <SocialLinks>
         <SocialLink href="https://twitter.com" aria-label="Twitter">

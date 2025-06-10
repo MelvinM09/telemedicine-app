@@ -17,7 +17,7 @@ const SignInPage = () => {
     const initialBalls = Array.from({ length: 100 }, () => ({
       x: Math.random() * 100,
       y: Math.random() * 50,
-      size: 0.5 + Math.random() * 1, // Reduced size to range from 0.5px to 1.5px
+      size: 0.5 + Math.random() * 1,
       speedX: (Math.random() - 0.5) * 0.1,
       speedY: (Math.random() - 0.5) * 0.1,
     }));
@@ -36,7 +36,6 @@ const SignInPage = () => {
           let newSpeedX = ball.speedX;
           let newSpeedY = ball.speedY;
 
-          // Bounce off edges
           if (newX <= 0 || newX >= 100) newSpeedX *= -1;
           if (newY <= 0 || newY >= 50) newSpeedY *= -1;
 
@@ -65,7 +64,16 @@ const SignInPage = () => {
       const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
       console.log("Login response:", res.data);
       setStep(2);
-      setTimeout(() => navigate("/dashboard"), 2000);
+
+      // Extract the user's role from the login response
+      const userRole = res.data.role; // e.g., "patient" or "doctor"
+      setTimeout(() => {
+        if (userRole === "doctor") {
+          navigate("/doctor-dashboard");
+        } else {
+          navigate("/user-dashboard");
+        }
+      }, 2000); // Redirect after 2 seconds to show "Login Successful" message
     } catch (err) {
       console.error("Login error:", err);
       const errorMessage = err.response?.data || "Login failed. Please try again.";
@@ -76,12 +84,11 @@ const SignInPage = () => {
   };
 
   const handleSignUpNavigation = () => {
-    navigate("/signup"); // Navigate to the SignUpPage
+    navigate("/signup");
   };
 
   return (
     <div style={styles.background}>
-      {/* Animated semi-circle with moving balls */}
       <div style={styles.gradientSemiCircle}>
         {balls.map((ball, index) => (
           <div
