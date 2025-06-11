@@ -9,10 +9,10 @@ const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [balls, setBalls] = useState([]);
   const navigate = useNavigate();
 
-  // Initialize balls
   useEffect(() => {
     const initialBalls = Array.from({ length: 100 }, () => ({
       x: Math.random() * 100,
@@ -24,7 +24,6 @@ const SignInPage = () => {
     setBalls(initialBalls);
   }, []);
 
-  // Animate balls
   useEffect(() => {
     if (balls.length === 0) return;
 
@@ -55,32 +54,68 @@ const SignInPage = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("Please enter both email and password");
+      setError("Please provide both email and password");
       return;
     }
 
     setLoading(true);
-    try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
-      console.log("Login response:", res.data);
-      setStep(2);
+    setError("");
 
-      // Extract the user's role from the login response
-      const userRole = res.data.role; // e.g., "patient" or "doctor"
-      setTimeout(() => {
-        if (userRole === "doctor") {
-          navigate("/doctor-dashboard");
-        } else {
-          navigate("/user-dashboard");
-        }
-      }, 2000); // Redirect after 2 seconds to show "Login Successful" message
+    let role = null;
+
+    try {
+      // Attempt doctor login
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+        role: "doctor",
+      });
+      console.log("Doctor login response:", res.data);
+      role = res.data.role?.toLowerCase();
     } catch (err) {
-      console.error("Login error:", err);
-      const errorMessage = err.response?.data || "Login failed. Please try again.";
-      alert(errorMessage);
-    } finally {
-      setLoading(false);
+      // Fallback to patient login
+      if (err.response?.status === 401 || err.response?.status === 400) {
+        try {
+          const res = await axios.post("http://localhost:5000/api/auth/login", {
+            email,
+            password,
+            role: "patient",
+          });
+          console.log("Patient login response:", res.data);
+          role = res.data.role?.toLowerCase();
+        } catch (patientErr) {
+          console.error("Login error (patient):", patientErr);
+          setError(patientErr.response?.data?.message || "Login failed. Please try again.");
+          setLoading(false);
+          return;
+        }
+      } else {
+        console.error("Login error (doctor):", err);
+        setError(err.response?.data?.message || "Login failed. Please try again.");
+        setLoading(false);
+        return;
+      }
     }
+
+    if (!role) {
+      setError("Login succeeded, but role not provided. Contact support.");
+      setLoading(false);
+      return;
+    }
+
+    setStep(2);
+
+    setTimeout(() => {
+      if (role === "doctor") {
+        navigate("/doctor-dashboard");
+      } else if (role === "patient") {
+        navigate("/user-dashboard");
+      } else {
+        setError("Unknown role. Please contact support.");
+      }
+    }, 2000);
+
+    setLoading(false);
   };
 
   const handleSignUpNavigation = () => {
@@ -109,11 +144,12 @@ const SignInPage = () => {
       <div style={styles.container}>
         <div style={styles.logo}>Telemedicine</div>
         <div style={styles.tagline}>Treat Yourself from your home.</div>
-        
+
         {step === 1 && (
           <>
             <div style={styles.formContainer}>
               <h2 style={styles.signInText}>Sign In</h2>
+              {error && <div style={styles.errorText}>{error}</div>}
               <div style={styles.formGroup}>
                 <input
                   type="email"
@@ -190,6 +226,7 @@ const styles = {
     zIndex: 1,
     border: '1px solid rgba(255, 255, 255, 0.1)',
     backdropFilter: 'blur(10px)',
+    marginTop: "40px",
   },
   logo: {
     fontSize: "32px",
@@ -226,9 +263,6 @@ const styles = {
     color: "#fff",
     outline: "none",
     transition: "border 0.3s",
-    '&:focus': {
-      borderColor: 'rgba(210, 180, 140, 0.5)',
-    }
   },
   button: {
     width: "100%",
@@ -242,9 +276,6 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s",
     marginTop: "10px",
-    '&:hover': {
-      backgroundColor: "#eee",
-    }
   },
   signUpPrompt: {
     borderTop: "1px solid rgba(255, 255, 255, 0.1)",
@@ -267,10 +298,6 @@ const styles = {
     borderRadius: "6px",
     cursor: "pointer",
     transition: "all 0.3s",
-    '&:hover': {
-      borderColor: 'rgba(210, 180, 140, 0.5)',
-      color: 'rgba(210, 180, 140, 1)',
-    }
   },
   successContainer: {
     padding: "20px",
@@ -278,6 +305,12 @@ const styles = {
   successText: {
     color: "#fff",
     fontSize: "24px",
+  },
+  errorText: {
+    color: "#ff4d4d",
+    fontSize: "14px",
+    marginBottom: "15px",
+    textAlign: "center",
   },
 };
 

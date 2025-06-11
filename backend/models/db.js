@@ -15,7 +15,7 @@ connection.connect((err) => {
   console.log("✅ Connected to MySQL");
 });
 
-// Create users table (for patients only)
+// Create users table
 connection.query(`
   CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -46,15 +46,16 @@ connection.query(`
   else console.log("✅ Pending users table ready");
 });
 
-// Create doctors table (for doctors only, no foreign key constraint to users)
-
-  connection.query(`
+// ✅ Create doctors table with role column
+connection.query(`
   CREATE TABLE IF NOT EXISTS doctors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
     name VARCHAR(255),
     specialty VARCHAR(255),
     experience INT,
+    role ENUM('doctor') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )
 `, (err) => {
@@ -79,7 +80,7 @@ connection.query(`
   else console.log("✅ Consultations table ready");
 });
 
-// Promise-based query method
+// Promise wrapper
 connection.promise = () => {
   return {
     query: (sql, args) => {
